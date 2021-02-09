@@ -2,7 +2,6 @@ package com.aequilibrium.sample.transformer;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -23,11 +22,13 @@ import com.aequilibrium.sample.transformer.persistance.TransformerRepository;
 
 public class TransformerServiceTest {
 
+	@MockBean
+	private TransformerRepository repository;
+	
 	@Autowired
 	private TransformerService service;
 	
-	@MockBean
-	private TransformerRepository repository;
+
 	
 	private List<Long> ids = new ArrayList<>();
 	private List<Transformer> transformers = new ArrayList<>();
@@ -52,6 +53,8 @@ public class TransformerServiceTest {
 			public Long getId() {
 				return tId;
 			}
+			@Override
+			public void setId(long id) {}
 			@Override
 			public String getName() {
 				return tName;
@@ -108,12 +111,12 @@ public class TransformerServiceTest {
 	public void testGetById() {
 		Mockito.when(repository.findById(5L)).thenReturn(Optional.of(transformers.get(0)));
 		
-		assertEquals(service.getTransformer(5L).getName(),transformers.get(0).getName());
+		assertEquals(service.getTransformer(5L).get().getName(),transformers.get(0).getName());
 	}
 	
 	@Test
 	public void testGetByIdFail() {
-		assertNull(service.getTransformer(6L));
+		assertTrue(service.getTransformer(6L).isEmpty());
 	}
 	
 	@Test

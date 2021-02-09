@@ -9,25 +9,18 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.aequilibrium.sample.transformer.Transformer;
 import com.aequilibrium.sample.transformer.Transformer.Attribute;
 
 public class FightTest {
 	
-	@Autowired
-	public static Transformer PREDAKING;
-	@Autowired
-	public static Transformer OPTIMUS;
-	@Autowired
-	public static Transformer STARSCREAM;
-	@Autowired
-	public static Transformer SOUNDWAVE;
-	@Autowired
-	public static Transformer RODIMUS;
-	@Autowired
-	public static Transformer BUMBLEBEE;
+	public static Transformer PREDAKING = Transformer.blankTransformer();
+	public static Transformer OPTIMUS = Transformer.blankTransformer();
+	public static Transformer STARSCREAM = Transformer.blankTransformer();
+	public static Transformer SOUNDWAVE = Transformer.blankTransformer();
+	public static Transformer RODIMUS = Transformer.blankTransformer();
+	public static Transformer BUMBLEBEE = Transformer.blankTransformer();
 	
 	private List<Transformer> combatants = new ArrayList<>();
 	
@@ -103,7 +96,7 @@ public class FightTest {
 	public void testOutclassed() {
 		combatants.add(STARSCREAM);
 		combatants.add(BUMBLEBEE);
-		assertEquals(Fight.startBattle(combatants).getVictor(),Fight.OUTCOME_AUTOBOTS);
+		assertEquals(Fight.startBattle(combatants).getVictor(),Fight.OUTCOME_DECEPTICONS);
 	}
 	
 	@Test

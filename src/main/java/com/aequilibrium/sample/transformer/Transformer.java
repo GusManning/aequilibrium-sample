@@ -20,7 +20,13 @@ public interface Transformer {
 	public static final char AUTOBOT = 'A';
 	public static final char DECEPTICON = 'D';
 	
+	public static Transformer blankTransformer() {
+		return new TransformerImpl();
+	}
+	
 	public Long getId();
+	
+	public void setId(long id);
 	
 	public String getName();
 	

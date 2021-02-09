@@ -6,15 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TransformerTest {
-	@Autowired
+
 	private Transformer transformer;
 	
 	@BeforeEach
 	private void setupTransformer() {
-		
+		transformer = Transformer.blankTransformer();
 	}
 	
 	@Test

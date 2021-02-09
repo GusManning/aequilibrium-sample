@@ -17,7 +17,7 @@ public interface Fight {
 	public static final String MIDROLL_AUTOBOT = "https://www.youtube.com/watch?v=ODy_VrL_EXo";
 
 	public static Fight startBattle( List<Transformer> combatants ) {
-		return null;
+		return new FightImpl(combatants);
 	}
 	
 	public List<Transformer> survivingLosers();

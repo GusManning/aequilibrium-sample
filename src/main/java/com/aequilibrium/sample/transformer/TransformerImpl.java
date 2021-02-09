@@ -3,23 +3,22 @@ package com.aequilibrium.sample.transformer;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity(name = "TRANSFORMER")
+@Entity
+@Table(name = "transformers")
 public class TransformerImpl implements Transformer {
 
 	@Id
-	@Column(name="ID")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	@Column(name="NAME",length=100,nullable=false)
+
 	private String name = "";
-	@Column(name="FACTION",nullable=false)
 	private char faction;
 	@ElementCollection
 	private Map<Attribute,Byte> attributes = new HashMap<>();

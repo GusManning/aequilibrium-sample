@@ -20,7 +20,7 @@ public interface Transformer {
 	public static final char AUTOBOT = 'A';
 	public static final char DECEPTICON = 'D';
 	
-	public int getId();
+	public Long getId();
 	
 	public String getName();
 	
@@ -30,7 +30,7 @@ public interface Transformer {
 	
 	public void setFaction(char faction);
 	
-	public Byte setAttribute(Attribute attribute, byte value);
+	public void setAttribute(Attribute attribute, byte value);
 	
 	public Byte getAttribute(Attribute attribute );
 	

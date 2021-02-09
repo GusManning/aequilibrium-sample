@@ -6,11 +6,11 @@ public interface TransformerService {
 	
 	public List<Transformer> getAllTransformers();
 	
-	public List<Transformer> getTransformersById(int[] ids);
+	public Transformer getTransformer(long id);
 	
-	public void deleteTransformer(int id);
+	public List<Transformer> getTransformersById(List<Long> ids);
 	
-	public Transformer getTransformer(int id);
+	public void deleteTransformer(long id);
 	
 	public void saveTransformer(Transformer save);
 	

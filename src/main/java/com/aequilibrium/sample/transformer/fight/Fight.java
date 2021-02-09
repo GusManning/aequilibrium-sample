@@ -11,7 +11,7 @@ public interface Fight {
 	
 	public static final String OUTCOME_AUTOBOTS = "Autobots";
 	public static final String OUTCOME_DECEPTICONS = "Decepticons";
-	public static final String OUTCOME_TIE = "TIE";
+	public static final String OUTCOME_TIE = "Tie";
 	
 	public static final String MIDROLL_DECEPTICON = "https://www.youtube.com/watch?v=_70TAZPStzQ";
 	public static final String MIDROLL_AUTOBOT = "https://www.youtube.com/watch?v=ODy_VrL_EXo";

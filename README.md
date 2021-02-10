@@ -102,7 +102,7 @@ Example
  
 
 #### Delete Transformer:
-Get:[Server-name]:8080/api/transformers/{id}
+**Delete:[Server-name]:8080/api/transformers/{id}**
 
 This will remove the Transformer from the database with the id matching the id provided in the URL.
 

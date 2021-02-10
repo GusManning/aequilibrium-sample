@@ -48,7 +48,7 @@ public class TransformerServiceTest {
 		transformer.setName(name);
 		transformer.setFaction(Transformer.AUTOBOT);
 		
-		for(Attribute attr:Transformer.SKILLS) {
+		for(Attribute attr:Transformer.OVERALL) {
 			transformer.setAttribute(attr,(byte) 5);
 		}
 		return transformer;

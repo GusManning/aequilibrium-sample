@@ -3,13 +3,16 @@ package com.aequilibrium.sample.transformer;
 import java.util.EnumSet;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonDeserialize(as = TransformerImpl.class)
 public interface Transformer {
 
 	public enum Attribute { 
-		STRENGTH, INTELLIGENCE, SPEED, ENDURANCE, RANK, COURAGE, FIREPOWER
+		STRENGTH, INTELLIGENCE, SPEED, ENDURANCE, RANK, COURAGE, FIREPOWER, SKILL
 	}
 	
-	public static final EnumSet<Attribute> SKILLS = EnumSet.of( 
+	public static final EnumSet<Attribute> OVERALL = EnumSet.of( 
 			Attribute.STRENGTH, 
 			Attribute.INTELLIGENCE, 
 			Attribute.SPEED, 

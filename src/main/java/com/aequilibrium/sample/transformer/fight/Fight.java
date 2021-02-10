@@ -20,11 +20,11 @@ public interface Fight {
 		return new FightImpl(combatants);
 	}
 	
-	public List<Transformer> survivingLosers();
+	public List<Transformer> getLosers();
 	
-	public List<Transformer> survivingVictors();
+	public List<Transformer> getVictors();
 	
-	public int numberOfBattles();
+	public int getBattles();
 	
 	public String getVictor();
 	

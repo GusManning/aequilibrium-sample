@@ -19,7 +19,7 @@ import com.aequilibrium.sample.transformer.Transformer;
 import com.aequilibrium.sample.transformer.TransformerService;
 
 @RestController
-@RequestMapping("/transformers")
+@RequestMapping("/api/transformers")
 public class TransformerController {
 	
 	@Autowired

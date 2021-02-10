@@ -19,7 +19,6 @@ public class FightImpl implements Fight {
 		if ( combatants == null || combatants.isEmpty() ) {
 			return;
 		}
-		//TODO confirm order
 		combatants.sort(Comparator.comparingInt((Transformer t) -> ((int) t.getAttribute(Attribute.RANK))).reversed());
 		
 		// sort combatants into Autobot and Decepticon
@@ -57,8 +56,8 @@ public class FightImpl implements Fight {
 	}
 	
 	private void matchUp(int battle) {
-		Transformer autobot = autobots.get(battle);
-		Transformer decepticon = decepticons.get(battle);
+		final Transformer autobot = autobots.get(battle);
+		final Transformer decepticon = decepticons.get(battle);
 		
 		// see if either is Optimus or Predaking
 		if(isPrime(autobot)) { 
@@ -70,55 +69,46 @@ public class FightImpl implements Fight {
 		}
 		
 		// check if one side or the other will run
-		if(willRun(autobot, decepticon)) {
-			decepticonWins++;
-			return;
-		} else if(willRun(decepticon, autobot)) {
-			autobotWins++;
+		if(hasRun(autobot, decepticon)) {
 			return;
 		}
 		
-		int autobotSkill = 0,decepticonSkill = 0, autobotOverSkill = 0, decepticonOverSkill = 0;
-		for(Attribute skill:Transformer.SKILLS) {
-			autobotSkill += autobot.getAttribute(skill);
-			decepticonSkill += decepticon.getAttribute(skill);
-			
-			int compare = autobot.getAttribute(skill) - decepticon.getAttribute(skill);
-			if (compare <= -3) {
-				decepticonOverSkill++;
-			} else if (compare >= 3) {
-				autobotOverSkill++;
-			}
-		}
-		
-		// comparison of number of skills 3 points or more over opponent
-		if(autobotOverSkill > decepticonOverSkill) {
+		if (autobot.getAttribute(Attribute.SKILL) - decepticon.getAttribute(Attribute.SKILL) >= 3) {
 			autobotWin(battle);
 			return;
-		} else if(decepticonOverSkill > autobotOverSkill) {
+		} else if (decepticon.getAttribute(Attribute.SKILL) - autobot.getAttribute(Attribute.SKILL) >= 3) {
 			decepticonWin(battle);
 			return;
 		}
 		
-		// comparison of overall skill level
-		if(autobotSkill > decepticonSkill) {
+		// this mapping function adds all the overall skills of both combatants into a single value
+		int overall = Transformer.OVERALL.stream().mapToInt((a)->((int)(autobot.getAttribute(a)-decepticon.getAttribute(a)))).sum();
+		
+		// positive value is Autobot victory, negative is decepticon
+		if(overall > 0) {
 			autobotWin(battle);
 			return;
-		} else if(decepticonSkill > autobotSkill) {
+		} else if (overall < 0) {
 			decepticonWin(battle);
 			return;
 		}
-		
 		// ties destroy both sides
 		autobotWin(battle);
 		decepticonWin(battle);
 	}
 	
-	private boolean willRun(Transformer runner, Transformer from) {
-		if(from.getAttribute(Attribute.COURAGE) - runner.getAttribute(Attribute.COURAGE) >= 4) {
-			return from.getAttribute(Attribute.STRENGTH) - runner.getAttribute(Attribute.STRENGTH) >= 3;
+	private boolean hasRun(Transformer autobot, Transformer decepticon) {
+		int courageDiff = autobot.getAttribute(Attribute.COURAGE) - decepticon.getAttribute(Attribute.COURAGE);
+		int strengthDiff = autobot.getAttribute(Attribute.STRENGTH) - decepticon.getAttribute(Attribute.STRENGTH);
+		boolean ran = false;
+		if(courageDiff >= 4 && strengthDiff >= 3) {
+			autobotWins++;
+			ran = true;
+		} else if (courageDiff <= -4 && strengthDiff <= -3) {
+			decepticonWins++;
+			ran = true;
 		}
-		return false;
+		return ran;
 	}
 	
 	private void autobotWin(int battle) {
@@ -137,7 +127,7 @@ public class FightImpl implements Fight {
 	
 	
 	@Override
-	public List<Transformer> survivingLosers() {
+	public List<Transformer> getLosers() {
 		switch(getVictor()) {
 		case Fight.OUTCOME_AUTOBOTS:
 			return decepticons;
@@ -151,7 +141,7 @@ public class FightImpl implements Fight {
 	}
 
 	@Override
-	public List<Transformer> survivingVictors() {
+	public List<Transformer> getVictors() {
 		switch(getVictor()) {
 			case Fight.OUTCOME_AUTOBOTS:
 				return autobots;
@@ -163,7 +153,7 @@ public class FightImpl implements Fight {
 	}
 
 	@Override
-	public int numberOfBattles() {
+	public int getBattles() {
 		return battles;
 	}
 

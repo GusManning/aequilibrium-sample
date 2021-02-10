@@ -45,6 +45,7 @@ public class FightTest {
 		STARSCREAM.setAttribute(Attribute.SPEED,(byte) 10);
 		STARSCREAM.setAttribute(Attribute.FIREPOWER,(byte)10);
 		STARSCREAM.setAttribute(Attribute.INTELLIGENCE,(byte) 10);
+		STARSCREAM.setAttribute(Attribute.SKILL,(byte) 1);
 		
 		SOUNDWAVE.setName("Soundwave");
 		SOUNDWAVE.setFaction(Transformer.DECEPTICON);
@@ -61,14 +62,10 @@ public class FightTest {
 		setAttributesTo(BUMBLEBEE,(byte)4);
 	}
 	
-	private static void setAttributesTo(Transformer bot, byte attr ) {
-		bot.setAttribute(Attribute.COURAGE,attr);
-		bot.setAttribute(Attribute.ENDURANCE,attr);
-		bot.setAttribute(Attribute.FIREPOWER,attr);
-		bot.setAttribute(Attribute.INTELLIGENCE,attr);
-		bot.setAttribute(Attribute.RANK,attr);
-		bot.setAttribute(Attribute.SPEED,attr);
-		bot.setAttribute(Attribute.STRENGTH,attr);
+	private static void setAttributesTo(Transformer bot, byte value ) {
+		for(Attribute attribute:Transformer.Attribute.values()) {
+			bot.setAttribute(attribute, value);
+		}
 	}
 	
 	@Test
@@ -89,14 +86,14 @@ public class FightTest {
 	public void testRunaway() {
 		combatants.add(STARSCREAM);
 		combatants.add(RODIMUS);
-		assertTrue(Fight.startBattle(combatants).survivingLosers().contains(STARSCREAM));
+		assertTrue(Fight.startBattle(combatants).getLosers().contains(STARSCREAM));
 	}
 	
 	@Test
 	public void testOutclassed() {
 		combatants.add(STARSCREAM);
 		combatants.add(BUMBLEBEE);
-		assertEquals(Fight.startBattle(combatants).getVictor(),Fight.OUTCOME_DECEPTICONS);
+		assertEquals(Fight.startBattle(combatants).getVictor(),Fight.OUTCOME_AUTOBOTS);
 	}
 	
 	@Test
@@ -114,11 +111,11 @@ public class FightTest {
 
 		Fight fight = Fight.startBattle(combatants);
 		// no one survives Optimus + Predaking
-		assertEquals(fight.survivingLosers().size() + fight.survivingVictors().size(), 0);
+		assertEquals(fight.getLosers().size() + fight.getVictors().size(), 0);
 		// the autobots still win for having the most destroyed enemies
 		assertEquals(fight.getVictor(), Fight.OUTCOME_AUTOBOTS);
 		// there should only be one fight
-		assertEquals(fight.numberOfBattles(), 1);
+		assertEquals(fight.getBattles(), 1);
 	}
 	
 	@Test
@@ -142,8 +139,8 @@ public class FightTest {
 		combatants.add(RODIMUS);
 		Fight fight = Fight.startBattle(combatants);
 		
-		assertTrue(fight.survivingVictors().contains(BUMBLEBEE));
-		assertEquals(fight.numberOfBattles(), 1);
+		assertTrue(fight.getVictors().contains(BUMBLEBEE));
+		assertEquals(fight.getBattles(), 1);
 	}
 	
 	@Test
@@ -155,7 +152,7 @@ public class FightTest {
 		
 		assertEquals(fight.getVictor(),Fight.OUTCOME_TIE);
 		// in the case of a tie the losing forces have all the survivors
-		assertTrue(fight.survivingLosers().contains(BUMBLEBEE));
+		assertTrue(fight.getLosers().contains(BUMBLEBEE));
 	}
 	
 }

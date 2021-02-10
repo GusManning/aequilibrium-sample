@@ -16,7 +16,7 @@ public class TransformerImpl implements Transformer {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private Long id = null;
 
 	private String name = "";
 	private char faction;

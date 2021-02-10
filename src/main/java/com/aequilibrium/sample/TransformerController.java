@@ -1,7 +1,7 @@
 package com.aequilibrium.sample;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.aequilibrium.sample.transformer.Transformer;
 import com.aequilibrium.sample.transformer.TransformerService;
@@ -31,33 +32,42 @@ public class TransformerController {
 	}
 	
 	@GetMapping(value = "/{id}") 
-	public Transformer findById(@PathVariable("id") Long id){
-		if(id == null) {
-			throw new NoSuchElementException();
-		}
-		return transformerService.getTransformer(id).get();
-	}
-	
-	@PutMapping(value="/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public void update(@PathVariable( "id" ) Long id, @RequestBody Transformer resource ) {
-		if (resource.getId() != null && id != resource.getId()) {
-			throw new IllegalArgumentException("cannot update id of Transformer");
+	public Transformer findById(@PathVariable("id") Long id){	
+		Optional<Transformer> transformer= transformerService.getTransformer(id);
+
+		if(transformer.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Transformer not found");
 		}
 		
-		transformerService.updateTransformer(id, resource);
+		return transformer.get();
+	}
+	
+	@PutMapping
+	@ResponseStatus(HttpStatus.OK)
+	public void update( @RequestBody Transformer resource ) {
+		if (resource == null || resource.getId() == null ) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Transformer not saved");
+		}
+		
+		if(!transformerService.updateTransformer(resource)) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Transformer not found");
+		}
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@RequestBody Transformer resource ) {
-		transformerService.saveTransformer(resource);
+		if(resource == null || resource.getId() != null || !transformerService.saveTransformer(resource)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Transformer not saved");
+		}
 	}
 	
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable("id") Long id) {
-		transformerService.deleteTransformer(id);
+		if(!transformerService.deleteTransformer(id)) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Transformer not found");
+		}
 	}
 	
 }

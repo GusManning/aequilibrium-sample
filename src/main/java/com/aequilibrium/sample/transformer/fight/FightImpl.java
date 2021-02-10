@@ -49,6 +49,9 @@ public class FightImpl implements Fight {
 		for(int battle=battles-1;battle >= 0;battle--) {
 			// Optimus-Predaking matchups which devastate both sides
 			if(isPrime(autobots.get(battle)) && isPrime(decepticons.get(battle))) {
+				// if this even happens the fight ends immediately, since we handle fights
+				//  in reverse order we have to adjust number of fight.
+				battles = battles - battle;
 				autobotWins = decepticons.size();
 				decepticonWins = autobots.size();
 				decepticons.clear();

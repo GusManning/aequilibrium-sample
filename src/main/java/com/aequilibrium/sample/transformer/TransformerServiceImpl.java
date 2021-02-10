@@ -64,12 +64,17 @@ public class TransformerServiceImpl implements TransformerService {
 	}
 	
 	@Override
-	public boolean updateTransformer(long id, Transformer update) {
+	public boolean updateTransformer(Transformer update) {
 		if (update == null) {
 			return false;
 		}
-		// this will throw an exception if the old transformer is not found. 
-		TransformerImpl old = repository.findById(id).get();
+		
+		Optional<TransformerImpl> opt = repository.findById(update.getId());
+		if (opt.isEmpty()) {
+			return false;
+		}
+		
+		TransformerImpl old = opt.get();
 		
 		// update the old transformer with new stats
 		for(Transformer.Stats stat: Transformer.Stats.values()) {

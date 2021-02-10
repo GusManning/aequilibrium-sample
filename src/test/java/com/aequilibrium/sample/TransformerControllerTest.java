@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +15,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.aequilibrium.sample.transformer.Transformer;
 import com.aequilibrium.sample.transformer.TransformerService;
@@ -68,29 +68,36 @@ public class TransformerControllerTest {
 	@Test
 	public void testGetByIdFail() {
 		Mockito.when(service.getTransformer(1L)).thenReturn(Optional.empty());
-		assertThrows(NoSuchElementException.class, () -> {
+		assertThrows(ResponseStatusException.class, () -> {
 			controller.findById(1L);
 		});
 	}
 	
 	@Test
 	public void testUpdate() {
-		controller.update(1L, transformers.get(0));
-		Mockito.verify(service).updateTransformer(Mockito.anyLong(), transformerCaptor.capture());
+		Mockito.when(service.updateTransformer(transformers.get(0))).thenReturn(true);
+		controller.update(transformers.get(0));
+		Mockito.verify(service).updateTransformer(transformerCaptor.capture());
 		Transformer captured = transformerCaptor.getValue();
 		assertEquals(captured, transformers.get(0));
 	}
 	
 	@Test
 	public void testUpdateFail() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			controller.update(1L, transformers.get(2));
+		Mockito.when(service.updateTransformer(Mockito.any())).thenReturn(false);
+		assertThrows(ResponseStatusException.class, () -> {
+			controller.update(transformers.get(2));
+		});
+		Transformer noId = Transformer.blankTransformer();
+		assertThrows(ResponseStatusException.class, () -> {
+			controller.update(noId);
 		});
 	}
 	
 	@Test
 	public void testDelete() {
 		Long id = 5L;
+		Mockito.when(service.deleteTransformer(id)).thenReturn(true);
 		controller.delete(id);
 		Mockito.verify(service).deleteTransformer(idCaptor.capture());
 		Long captured = idCaptor.getValue();
@@ -99,10 +106,13 @@ public class TransformerControllerTest {
 	
 	@Test
 	public void testCreate() {
-		controller.create(transformers.get(2));
+		Transformer transformer = Transformer.blankTransformer();
+		transformer.setName("test");
+		Mockito.when(service.saveTransformer(transformer)).thenReturn(true);
+		controller.create(transformer);
 		Mockito.verify(service).saveTransformer(transformerCaptor.capture());
 		Transformer captured = transformerCaptor.getValue();
-		assertEquals(transformers.get(2),captured);
+		assertEquals(transformer,captured);
 	}
 
 	

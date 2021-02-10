@@ -40,9 +40,8 @@ public interface TransformerService {
 	
 	/**
 	 * Updater for transformer, can handle partial updates, if a value is not provided it will not be changed.
-	 * @param id of Transformer to save
-	 * @param save Transformer to be updated, note that id will not be updated and must match other param.
+	 * @param save Transformer to be updated
 	 * @return true of action is successful.
 	 */
-	public boolean updateTransformer(long id, Transformer save);
+	public boolean updateTransformer( Transformer save);
 }

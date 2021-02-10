@@ -118,10 +118,53 @@ The Fight interface returns a JSON object with the following format:
 {
     "battles": 3,
     "losers": [
-           AS TRANSFORMER JSON
+         {
+            "id": 6,
+            "name": "Astrotrain",
+            "faction": "D",
+            "stats": {
+                "INTELLIGENCE": 7,
+                "FIREPOWER": 6,
+                "COURAGE": 7,
+                "ENDURANCE": 7,
+                "RANK": 6,
+                "SPEED": 10,
+                "STRENGTH": 9,
+                "SKILL": 8
+            }
+        }
     ],
     "victors": [
-	AS TRANSFORMER JSON
+	{
+            "id": 1,
+            "name": "Optimus Prime",
+            "faction": "A",
+            "stats": {
+                "INTELLIGENCE": 10,
+                "FIREPOWER": 10,
+                "COURAGE": 10,
+                "ENDURANCE": 10,
+                "RANK": 10,
+                "SPEED": 7,
+                "STRENGTH": 10,
+                "SKILL": 9
+            }
+        },
+        {
+            "id": 5,
+            "name": "Ironhide",
+            "faction": "A",
+            "stats": {
+                "INTELLIGENCE": 10,
+                "FIREPOWER": 10,
+                "COURAGE": 8,
+                "ENDURANCE": 10,
+                "RANK": 9,
+                "SPEED": 8,
+                "STRENGTH": 9,
+                "SKILL": 9
+            }
+        }
     ],
     "midroll": "https://www.youtube.com/watch?v=ODy_VrL_EXo",
     "victor": "Autobots"

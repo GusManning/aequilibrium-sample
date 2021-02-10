@@ -1,12 +1,12 @@
 # aequilibrium-sample
 
 ## Table of Contents
-[Transformers](### Transformers)
-[Transformers API](#### Transformers API)
-[Fights](### Fights)
-[Fight Rules and Requirements](### Fight Rules and Requirements)
-[Assumptions](#### Assumptions)
-[Launch](### Launch)
+* [Transformers](#Transformers)
+* [Transformers API](#Transformers-API)
+* [Fights](#Fights)
+* [Fight Rules and Requirements](#Fight-Rules-and-Requirements)
+* [Assumptions](#Assumptions)
+* [Launch](#Launch)
 
 
 ## Overview
@@ -20,7 +20,8 @@ Transformers are transforming robots disguised as planes, cars, or other vehicle
 #### Transformer JSON format
 
 Example
-`
+
+```JSON
 {
     "id": 1,
     "name": "Optimus Prime",
@@ -36,32 +37,32 @@ Example
 	"SPEED": 7
     }
 }
-`
+```
 
--id: Long representing the index of a saved Transformer.
--Name: String, less that 100 characters
--Faction: “A” or “D” for Autobot or Decepticon respectively
--Stats: Stats are ranked 1 to 10, each associated one of the 8 Stat sections above.
+* id: Long representing the index of a saved Transformer.
+* Name: String, less that 100 characters
+* Faction: “A” or “D” for Autobot or Decepticon respectively
+* Stats: Stats are ranked 1 to 10, each associated one of the 8 Stat sections above.
 
-#### Transformers API
+### Transformers API
 
-##### Get All: 
-Get:[Server-name]:8080/api/transformers
+#### Get All: 
+**Get:[Server-name]:8080/api/transformers**
 
 Returns a list of Transformers in JSON format.
 
-##### Get By Id: 
-Get:[Server-name]:8080/api/transformers/{id}
+#### Get By Id: 
+**Get:[Server-name]:8080/api/transformers/{id}**
 
 Returns a single Transformer in JSON format, with an ID matching the ID passed in the URL.
 
-##### Create Transformer: 
-Post:[Server-name]:8080/api/transformers
+#### Create Transformer: 
+**Post:[Server-name]:8080/api/transformers**
 
 Creates and saves a Transformer in the systems in-memory database.  To create a Transformer send a Create request with JSON Body of the Transformer you wish to create.  You must include all fields in this JSON payload EXCEPT for the id field.  Including id will cause your operation to fail.  Create can be used to make duplicates of already saved Transformers although their IDs will be different. 
 
 Example:
-`
+```JSON
 {
     "name": "Soundwave",
     "faction": "D",
@@ -76,15 +77,15 @@ Example:
         "SPEED": 5
     }
 }
-`
+```
 
-##### Update Transformer:
-Put: [Server-name]:8080/api/transformers
+#### Update Transformer:
+**Put: [Server-name]:8080/api/transformers**
 
 Updates an existing Transformer in the system.  The Body of this Put must be a JSON of a Transformer object, but it may be a partial Transformer JSON with only the id field being mandatory.  Fields not included will not be updated on the Transformer in the Database.
 
 Example
-`
+```JSON
 {
     "id": 5,
     "name": "Ironhide",
@@ -97,10 +98,10 @@ Example
     "SPEED": 8
     }
 }
-`
+```
  
 
-##### Delete Transformer:
+#### Delete Transformer:
 Get:[Server-name]:8080/api/transformers/{id}
 
 This will remove the Transformer from the database with the id matching the id provided in the URL.
@@ -113,7 +114,7 @@ Since peace was never an option between the Autobots and Decepticons, they wind 
 
 The Fight interface returns a JSON object with the following format:
 
-`
+```JSON
 {
     "battles": 3,
     "losers": [
@@ -125,23 +126,23 @@ The Fight interface returns a JSON object with the following format:
     "midroll": "https://www.youtube.com/watch?v=ODy_VrL_EXo",
     "victor": "Autobots"
 }
-`
+```
 
-Battles: Number of fought between two Transformers
-Losers: A List of Transformers in JSON who survived the fight on the losing side.
-Victors: A List of Transformers in JSON who survived the fight on the winners side.
-Midroll: A link to a short video clip if relevant
-Victor: String name of the winning faction.
+* Battles: Number of fought between two Transformers
+* Losers: A List of Transformers in JSON who survived the fight on the losing side.
+* Victors: A List of Transformers in JSON who survived the fight on the winners side.
+* Midroll: A link to a short video clip if relevant
+* Victor: String name of the winning faction.
 
-##### Simulate Fight:
-POST:[Server-name]:8080/api/fight
+#### Simulate Fight:
+**POST:[Server-name]:8080/api/fight**
 
 Posting a JSON List of Transformer Ids will return a Fight between all Posted Transformers as Combatants.  Any IDs that do not correspond to saved Transformers will be ignored.
 
 Example List:
 
 This will return a fight between the six default Transformers loaded on startup. 
-`
+```JSON
 [
     1,
     2,
@@ -150,7 +151,7 @@ This will return a fight between the six default Transformers loaded on startup.
     5,
     6
 ]
-`
+```
   
 ### Fight Rules and Requirements
 
@@ -171,7 +172,7 @@ This will return a fight between the six default Transformers loaded on startup.
 * Since apocalyptic fights stop immediately this limits the number of battles.
 * Fighters are paired up from highest rank to lowest.
 
-### Launch
+## Launch
 
 To get started with this code first you will need to download and unpack the file structure.  
 You will need Maven on your computer, along with Java 11 installed.  You can run the application from the command line or a BASH console by navigating to the project’s Pom.xml directory and running the following command:

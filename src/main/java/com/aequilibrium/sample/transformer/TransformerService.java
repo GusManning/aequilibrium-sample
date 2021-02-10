@@ -15,4 +15,5 @@ public interface TransformerService {
 	
 	public boolean saveTransformer(Transformer save);
 	
+	public boolean updateTransformer(long id, Transformer save);
 }

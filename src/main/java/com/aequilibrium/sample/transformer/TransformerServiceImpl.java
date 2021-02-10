@@ -27,7 +27,7 @@ public class TransformerServiceImpl implements TransformerService {
 
 	@Override
 	public List<Transformer> getTransformersById(List<Long> ids) {
-		// TODO test to see if they include null on not found ids, if so filter nulls
+		// TODO test to see if they include null for not found ids, if so filter nulls
 		return repository.findAllById(ids).stream().map((t) ->((Transformer) t)).collect(Collectors.toList());
 	}
 
@@ -55,5 +55,24 @@ public class TransformerServiceImpl implements TransformerService {
 		repository.save((TransformerImpl) save);
 		return true;
 	}
+	
+	@Override
+	public boolean updateTransformer(long id, Transformer update) {
+		// this will throw an exception if the old transformer is not found. 
+		TransformerImpl old = repository.findById(id).get();
+		
+		for(Transformer.Attribute attr: Transformer.Attribute.values()) {
+			Byte nValue = update.getAttribute(attr);
+			if(nValue != null) {
+				old.setAttribute(attr, nValue);
+			}
+		}
+		old.setName(update.getName());
+		old.setFaction(update.getFaction());
+		
+		repository.save(old);
+		return true;
+	}
+
 
 }

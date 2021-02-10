@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.aequilibrium.sample.transformer.Transformer.Attribute;
+import com.aequilibrium.sample.transformer.Transformer.Stats;
 import com.aequilibrium.sample.transformer.persistance.TransformerRepository;
 
 @Service
@@ -46,12 +46,16 @@ public class TransformerServiceImpl implements TransformerService {
 
 	@Override
 	public boolean saveTransformer(Transformer save) {
-		// we don't save any Transformer with skills lower that 0 or higher than 10
+		if (save == null) {
+			return false;
+		}
+		// we don't save any Transformer with skills lower that 1 or higher than 10
 		// no factions that are not Autobot or Decepticon are allowed
-		if (save.getAttributes().values().stream().filter((b)->(b > 10 && b < 0 )).count() > 0
+		if (save.getStats().values().stream().filter((b)->(b > 10 && b < 1 )).count() > 0
 				|| save.getName() == null
 				|| save.getName().length() > 100
-				|| !( save.getFaction() == Transformer.AUTOBOT || save.getFaction() == Transformer.DECEPTICON ) ) {
+				|| !( save.getFaction() == Transformer.AUTOBOT || save.getFaction() == Transformer.DECEPTICON )
+				|| save.getStats().size() != Transformer.Stats.values().length ) {
 			return false;
 		}
 		
@@ -61,13 +65,17 @@ public class TransformerServiceImpl implements TransformerService {
 	
 	@Override
 	public boolean updateTransformer(long id, Transformer update) {
+		if (update == null) {
+			return false;
+		}
 		// this will throw an exception if the old transformer is not found. 
 		TransformerImpl old = repository.findById(id).get();
 		
-		for(Transformer.Attribute attr: Transformer.Attribute.values()) {
-			Byte nValue = update.getAttribute(attr);
+		// update the old transformer with new stats
+		for(Transformer.Stats stat: Transformer.Stats.values()) {
+			Byte nValue = update.getStat(stat);
 			if(nValue != null) {
-				old.setAttribute(attr, nValue);
+				old.setStat(stat, nValue);
 			}
 		}
 
@@ -80,86 +88,86 @@ public class TransformerServiceImpl implements TransformerService {
 	
 	@PostConstruct
 	public void postConstruct() {
-
+		// create six default transformers from canon tech sheets
 		Transformer optimus = Transformer.blankTransformer();
-		optimus.setAttribute(Attribute.COURAGE,(byte) 10);
-		optimus.setAttribute(Attribute.ENDURANCE,(byte) 10);
-		optimus.setAttribute(Attribute.FIREPOWER,(byte) 10);
-		optimus.setAttribute(Attribute.INTELLIGENCE,(byte) 10);
-		optimus.setAttribute(Attribute.RANK,(byte) 10);
-		optimus.setAttribute(Attribute.SPEED,(byte) 7);
-		optimus.setAttribute(Attribute.STRENGTH, (byte) 10);
-		optimus.setAttribute(Attribute.SKILL, (byte) 9);
+		optimus.setStat(Stats.COURAGE,(byte) 10);
+		optimus.setStat(Stats.ENDURANCE,(byte) 10);
+		optimus.setStat(Stats.FIREPOWER,(byte) 10);
+		optimus.setStat(Stats.INTELLIGENCE,(byte) 10);
+		optimus.setStat(Stats.RANK,(byte) 10);
+		optimus.setStat(Stats.SPEED,(byte) 7);
+		optimus.setStat(Stats.STRENGTH, (byte) 10);
+		optimus.setStat(Stats.SKILL, (byte) 9);
 		optimus.setFaction(Transformer.AUTOBOT);
 		optimus.setName("Optimus Prime");
 		
 		repository.save((TransformerImpl) optimus);
 		
 		Transformer megatron = Transformer.blankTransformer();
-		megatron.setAttribute(Attribute.COURAGE,(byte) 9);
-		megatron.setAttribute(Attribute.ENDURANCE,(byte) 10);
-		megatron.setAttribute(Attribute.FIREPOWER,(byte) 10);
-		megatron.setAttribute(Attribute.INTELLIGENCE,(byte) 10);
-		megatron.setAttribute(Attribute.RANK,(byte) 10);
-		megatron.setAttribute(Attribute.SPEED,(byte) 10);
-		megatron.setAttribute(Attribute.STRENGTH, (byte) 10);
-		megatron.setAttribute(Attribute.SKILL, (byte) 9);
+		megatron.setStat(Stats.COURAGE,(byte) 9);
+		megatron.setStat(Stats.ENDURANCE,(byte) 10);
+		megatron.setStat(Stats.FIREPOWER,(byte) 10);
+		megatron.setStat(Stats.INTELLIGENCE,(byte) 10);
+		megatron.setStat(Stats.RANK,(byte) 10);
+		megatron.setStat(Stats.SPEED,(byte) 10);
+		megatron.setStat(Stats.STRENGTH, (byte) 10);
+		megatron.setStat(Stats.SKILL, (byte) 9);
 		megatron.setFaction(Transformer.DECEPTICON);
 		megatron.setName("Megatron");
 		
 		repository.save((TransformerImpl) megatron);
 		
 		Transformer ratchet = Transformer.blankTransformer();
-		ratchet.setAttribute(Attribute.COURAGE,(byte) 10);
-		ratchet.setAttribute(Attribute.ENDURANCE,(byte) 9);
-		ratchet.setAttribute(Attribute.FIREPOWER,(byte) 3);
-		ratchet.setAttribute(Attribute.INTELLIGENCE,(byte) 9);
-		ratchet.setAttribute(Attribute.RANK,(byte) 5);
-		ratchet.setAttribute(Attribute.SPEED,(byte) 6);
-		ratchet.setAttribute(Attribute.STRENGTH, (byte) 4);
-		ratchet.setAttribute(Attribute.SKILL, (byte) 10);
+		ratchet.setStat(Stats.COURAGE,(byte) 10);
+		ratchet.setStat(Stats.ENDURANCE,(byte) 9);
+		ratchet.setStat(Stats.FIREPOWER,(byte) 3);
+		ratchet.setStat(Stats.INTELLIGENCE,(byte) 9);
+		ratchet.setStat(Stats.RANK,(byte) 5);
+		ratchet.setStat(Stats.SPEED,(byte) 6);
+		ratchet.setStat(Stats.STRENGTH, (byte) 4);
+		ratchet.setStat(Stats.SKILL, (byte) 10);
 		ratchet.setFaction(Transformer.AUTOBOT);
 		ratchet.setName("Ratchet");
 		
 		repository.save((TransformerImpl) ratchet);
 		
 		Transformer soundwave = Transformer.blankTransformer();
-		soundwave.setAttribute(Attribute.COURAGE,(byte) 9);
-		soundwave.setAttribute(Attribute.ENDURANCE,(byte) 9);
-		soundwave.setAttribute(Attribute.FIREPOWER,(byte) 6);
-		soundwave.setAttribute(Attribute.INTELLIGENCE,(byte) 6);
-		soundwave.setAttribute(Attribute.RANK,(byte) 8);
-		soundwave.setAttribute(Attribute.SPEED,(byte) 5);
-		soundwave.setAttribute(Attribute.STRENGTH, (byte) 8);
-		soundwave.setAttribute(Attribute.SKILL, (byte) 5);
+		soundwave.setStat(Stats.COURAGE,(byte) 9);
+		soundwave.setStat(Stats.ENDURANCE,(byte) 9);
+		soundwave.setStat(Stats.FIREPOWER,(byte) 6);
+		soundwave.setStat(Stats.INTELLIGENCE,(byte) 6);
+		soundwave.setStat(Stats.RANK,(byte) 8);
+		soundwave.setStat(Stats.SPEED,(byte) 5);
+		soundwave.setStat(Stats.STRENGTH, (byte) 8);
+		soundwave.setStat(Stats.SKILL, (byte) 5);
 		soundwave.setFaction(Transformer.DECEPTICON);
 		soundwave.setName("Soundwave");
 		
 		repository.save((TransformerImpl) soundwave);
 		
 		Transformer ironhide = Transformer.blankTransformer();
-		ironhide.setAttribute(Attribute.COURAGE,(byte) 8);
-		ironhide.setAttribute(Attribute.ENDURANCE,(byte) 10);
-		ironhide.setAttribute(Attribute.FIREPOWER,(byte) 10);
-		ironhide.setAttribute(Attribute.INTELLIGENCE,(byte) 10);
-		ironhide.setAttribute(Attribute.RANK,(byte) 9);
-		ironhide.setAttribute(Attribute.SPEED,(byte) 8);
-		ironhide.setAttribute(Attribute.STRENGTH, (byte) 9);
-		ironhide.setAttribute(Attribute.SKILL, (byte) 9);
+		ironhide.setStat(Stats.COURAGE,(byte) 8);
+		ironhide.setStat(Stats.ENDURANCE,(byte) 10);
+		ironhide.setStat(Stats.FIREPOWER,(byte) 10);
+		ironhide.setStat(Stats.INTELLIGENCE,(byte) 10);
+		ironhide.setStat(Stats.RANK,(byte) 9);
+		ironhide.setStat(Stats.SPEED,(byte) 8);
+		ironhide.setStat(Stats.STRENGTH, (byte) 9);
+		ironhide.setStat(Stats.SKILL, (byte) 9);
 		ironhide.setFaction(Transformer.AUTOBOT);
 		ironhide.setName("Ironhide");
 		
 		repository.save((TransformerImpl) ironhide);
 		
 		Transformer astrotrain = Transformer.blankTransformer();
-		astrotrain.setAttribute(Attribute.COURAGE,(byte) 7);
-		astrotrain.setAttribute(Attribute.ENDURANCE,(byte) 7);
-		astrotrain.setAttribute(Attribute.FIREPOWER,(byte) 6);
-		astrotrain.setAttribute(Attribute.INTELLIGENCE,(byte) 7);
-		astrotrain.setAttribute(Attribute.RANK,(byte) 6);
-		astrotrain.setAttribute(Attribute.SPEED,(byte) 10);
-		astrotrain.setAttribute(Attribute.STRENGTH, (byte) 9);
-		astrotrain.setAttribute(Attribute.SKILL, (byte) 8);
+		astrotrain.setStat(Stats.COURAGE,(byte) 7);
+		astrotrain.setStat(Stats.ENDURANCE,(byte) 7);
+		astrotrain.setStat(Stats.FIREPOWER,(byte) 6);
+		astrotrain.setStat(Stats.INTELLIGENCE,(byte) 7);
+		astrotrain.setStat(Stats.RANK,(byte) 6);
+		astrotrain.setStat(Stats.SPEED,(byte) 10);
+		astrotrain.setStat(Stats.STRENGTH, (byte) 9);
+		astrotrain.setStat(Stats.SKILL, (byte) 8);
 		astrotrain.setFaction(Transformer.DECEPTICON);
 		astrotrain.setName("Astrotrain");
 		

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.aequilibrium.sample.transformer.Transformer.Attribute;
+import com.aequilibrium.sample.transformer.Transformer.Stats;
 import com.aequilibrium.sample.transformer.persistance.TransformerRepository;
 
 @SpringBootTest
@@ -48,8 +48,8 @@ public class TransformerServiceTest {
 		transformer.setName(name);
 		transformer.setFaction(Transformer.AUTOBOT);
 		
-		for(Attribute attr:Transformer.OVERALL) {
-			transformer.setAttribute(attr,(byte) 5);
+		for(Stats stat:Transformer.Stats.values()) {
+			transformer.setStat(stat,(byte) 5);
 		}
 		return transformer;
 	}

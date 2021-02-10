@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.aequilibrium.sample.transformer.Transformer;
-import com.aequilibrium.sample.transformer.Transformer.Attribute;
+import com.aequilibrium.sample.transformer.Transformer.Stats;
 
 public class FightImpl implements Fight {
 
@@ -19,7 +19,9 @@ public class FightImpl implements Fight {
 		if ( combatants == null || combatants.isEmpty() ) {
 			return;
 		}
-		combatants.sort(Comparator.comparingInt((Transformer t) -> ((int) t.getAttribute(Attribute.RANK))).reversed());
+		
+		// sort combatants by rank
+		combatants.sort(Comparator.comparingInt((Transformer t) -> ((int) t.getStat(Stats.RANK))).reversed());
 		
 		// sort combatants into Autobot and Decepticon
 		for(Transformer bot:combatants) {
@@ -37,6 +39,9 @@ public class FightImpl implements Fight {
 		resolve();
 	}
 	
+	/**
+	 * Runs a loop where each Transformer is paired against an opponent.
+	 */
 	private void resolve() {
 		// Calculate number of battles
 		battles = Math.min(autobots.size(), decepticons.size());
@@ -55,6 +60,10 @@ public class FightImpl implements Fight {
 		}
 	}
 	
+	/**
+	 * Represents a fight between Transformers at an index of both lists. 
+	 * @param battle index of which two are fighting.
+	 */
 	private void matchUp(int battle) {
 		final Transformer autobot = autobots.get(battle);
 		final Transformer decepticon = decepticons.get(battle);
@@ -73,16 +82,17 @@ public class FightImpl implements Fight {
 			return;
 		}
 		
-		if (autobot.getAttribute(Attribute.SKILL) - decepticon.getAttribute(Attribute.SKILL) >= 3) {
+		// check for Skill based auto win if one fighter has a skill 3 greater than his opponent.
+		if (autobot.getStat(Stats.SKILL) - decepticon.getStat(Stats.SKILL) >= 3) {
 			autobotWin(battle);
 			return;
-		} else if (decepticon.getAttribute(Attribute.SKILL) - autobot.getAttribute(Attribute.SKILL) >= 3) {
+		} else if (decepticon.getStat(Stats.SKILL) - autobot.getStat(Stats.SKILL) >= 3) {
 			decepticonWin(battle);
 			return;
 		}
 		
 		// this mapping function adds all the overall skills of both combatants into a single value
-		int overall = Transformer.OVERALL.stream().mapToInt((a)->((int)(autobot.getAttribute(a)-decepticon.getAttribute(a)))).sum();
+		int overall = Transformer.OVERALL.stream().mapToInt((a)->((int)(autobot.getStat(a)-decepticon.getStat(a)))).sum();
 		
 		// positive value is Autobot victory, negative is decepticon
 		if(overall > 0) {
@@ -97,9 +107,16 @@ public class FightImpl implements Fight {
 		decepticonWin(battle);
 	}
 	
+	/**
+	 * Calculate courage and strength differences to see if one Transformer runs, if that the staying side
+	 * gets a win, but the loser survives.
+	 * @param autobot 
+	 * @param decepticon
+	 * @return true if one of the two combatants has run
+	 */
 	private boolean hasRun(Transformer autobot, Transformer decepticon) {
-		int courageDiff = autobot.getAttribute(Attribute.COURAGE) - decepticon.getAttribute(Attribute.COURAGE);
-		int strengthDiff = autobot.getAttribute(Attribute.STRENGTH) - decepticon.getAttribute(Attribute.STRENGTH);
+		int courageDiff = autobot.getStat(Stats.COURAGE) - decepticon.getStat(Stats.COURAGE);
+		int strengthDiff = autobot.getStat(Stats.STRENGTH) - decepticon.getStat(Stats.STRENGTH);
 		boolean ran = false;
 		if(courageDiff >= 4 && strengthDiff >= 3) {
 			autobotWins++;
@@ -111,16 +128,29 @@ public class FightImpl implements Fight {
 		return ran;
 	}
 	
+	/**
+	 * Marks an autobot win at this index, decepticon at index is removed from list.
+	 * @param battle
+	 */
 	private void autobotWin(int battle) {
 		decepticons.remove(battle);
 		autobotWins++;
 	}
 	
+	/**
+	 * Marks an decepticon win at this index, autobot at index is removed from list.
+	 * @param battle
+	 */
 	private void decepticonWin(int battle) {
 		autobots.remove(battle);
 		decepticonWins++;
 	}
 	
+	/**
+	 * Time saving method for determining if a transformer auto wins fights.
+	 * @param bot Transformer 
+	 * @return true if Transformer has one of two auto winning names
+	 */
 	private boolean isPrime(Transformer bot) {
 		return FightImpl.NAME_OPTIMUS_PRIME.equalsIgnoreCase(bot.getName()) || FightImpl.NAME_PREDAKING.equalsIgnoreCase(bot.getName());
 	}

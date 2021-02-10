@@ -42,20 +42,20 @@ public class TransformerTest {
 	}
 	
 	@Test
-	public void testAttribute() {
-		transformer.setAttribute(Transformer.Attribute.COURAGE,(byte) 5);
-		assertEquals(transformer.getAttribute(Transformer.Attribute.COURAGE),(byte) 5);
-		assertEquals(transformer.getAttributes().size(), 1);
+	public void testStat() {
+		transformer.setStat(Transformer.Stats.COURAGE,(byte) 5);
+		assertEquals(transformer.getStat(Transformer.Stats.COURAGE),(byte) 5);
+		assertEquals(transformer.getStats().size(), 1);
 	}
 	
 	@Test
-	public void testAttributesFail() {
-		// cap attributes above 10 at 10
-		transformer.setAttribute(Transformer.Attribute.COURAGE,(byte) 15);
-		assertEquals(transformer.getAttribute(Transformer.Attribute.COURAGE),(byte) 10);
-		// cap attributes below 0 at 0
-		transformer.setAttribute(Transformer.Attribute.COURAGE,(byte) -5);
-		assertEquals(transformer.getAttribute(Transformer.Attribute.COURAGE),(byte) 0);
+	public void testStatFail() {
+		// cap Stats above 10 at 10
+		transformer.setStat(Transformer.Stats.COURAGE,(byte) 15);
+		assertEquals(transformer.getStat(Transformer.Stats.COURAGE),(byte) 10);
+		// cap Stats below 1 at 1
+		transformer.setStat(Transformer.Stats.COURAGE,(byte) -5);
+		assertEquals(transformer.getStat(Transformer.Stats.COURAGE),(byte) 1);
 	}
 	
 }

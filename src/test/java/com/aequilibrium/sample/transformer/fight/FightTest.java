@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.aequilibrium.sample.transformer.Transformer;
-import com.aequilibrium.sample.transformer.Transformer.Attribute;
+import com.aequilibrium.sample.transformer.Transformer.Stats;
 
 public class FightTest {
 	
@@ -29,33 +29,33 @@ public class FightTest {
 		PREDAKING.setName(Fight.NAME_PREDAKING);
 		PREDAKING.setFaction(Transformer.DECEPTICON);
 		setAttributesTo(PREDAKING,(byte)1);
-		PREDAKING.setAttribute(Attribute.RANK,(byte) 10);
+		PREDAKING.setStat(Stats.RANK,(byte) 10);
 		
 		OPTIMUS.setName(Fight.NAME_OPTIMUS_PRIME);
 		OPTIMUS.setFaction(Transformer.AUTOBOT);
 		setAttributesTo(OPTIMUS,(byte)1);
-		OPTIMUS.setAttribute(Attribute.RANK,(byte) 10);
+		OPTIMUS.setStat(Stats.RANK,(byte) 10);
 		
 		STARSCREAM.setName("Starscream");
 		STARSCREAM.setFaction(Transformer.DECEPTICON);
 		setAttributesTo(STARSCREAM,(byte)5);
-		STARSCREAM.setAttribute(Attribute.COURAGE,(byte) 1);
-		STARSCREAM.setAttribute(Attribute.RANK,(byte) 9);
-		STARSCREAM.setAttribute(Attribute.STRENGTH,(byte) 2);
-		STARSCREAM.setAttribute(Attribute.SPEED,(byte) 10);
-		STARSCREAM.setAttribute(Attribute.FIREPOWER,(byte)10);
-		STARSCREAM.setAttribute(Attribute.INTELLIGENCE,(byte) 10);
-		STARSCREAM.setAttribute(Attribute.SKILL,(byte) 1);
+		STARSCREAM.setStat(Stats.COURAGE,(byte) 1);
+		STARSCREAM.setStat(Stats.RANK,(byte) 9);
+		STARSCREAM.setStat(Stats.STRENGTH,(byte) 2);
+		STARSCREAM.setStat(Stats.SPEED,(byte) 10);
+		STARSCREAM.setStat(Stats.FIREPOWER,(byte)10);
+		STARSCREAM.setStat(Stats.INTELLIGENCE,(byte) 10);
+		STARSCREAM.setStat(Stats.SKILL,(byte) 1);
 		
 		SOUNDWAVE.setName("Soundwave");
 		SOUNDWAVE.setFaction(Transformer.DECEPTICON);
 		setAttributesTo(SOUNDWAVE,(byte)5);
-		SOUNDWAVE.setAttribute(Attribute.RANK,(byte) 9);
+		SOUNDWAVE.setStat(Stats.RANK,(byte) 9);
 		
 		RODIMUS.setName("Rodimus");
 		RODIMUS.setFaction(Transformer.AUTOBOT);
 		setAttributesTo(RODIMUS,(byte)5);
-		RODIMUS.setAttribute(Attribute.RANK,(byte) 9);
+		RODIMUS.setStat(Stats.RANK,(byte) 9);
 		
 		BUMBLEBEE.setName("Bumblebee");
 		BUMBLEBEE.setFaction(Transformer.AUTOBOT);
@@ -63,8 +63,8 @@ public class FightTest {
 	}
 	
 	private static void setAttributesTo(Transformer bot, byte value ) {
-		for(Attribute attribute:Transformer.Attribute.values()) {
-			bot.setAttribute(attribute, value);
+		for(Stats attribute:Transformer.Stats.values()) {
+			bot.setStat(attribute, value);
 		}
 	}
 	

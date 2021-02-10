@@ -21,7 +21,7 @@ public class TransformerImpl implements Transformer {
 	private String name = "";
 	private char faction;
 	@ElementCollection
-	private Map<Attribute,Byte> attributes = new HashMap<>();
+	private Map<Stats,Byte> stats = new HashMap<>();
 	
 	@Override
 	public Long getId() {
@@ -58,24 +58,24 @@ public class TransformerImpl implements Transformer {
 	}
 
 	@Override
-	public void setAttribute(Attribute attribute, byte value) {
+	public void setStat(Stats stat, byte value) {
 		if( value > 10 ) {
 			value = 10;
-		} else if ( value < 0 ) {
-			value = 0;
+		} else if ( value < 1 ) {
+			value = 1;
 		}
 		
-		attributes.put(attribute, value);
+		stats.put(stat, value);
 	}
 
 	@Override
-	public Byte getAttribute(Attribute attribute) {
-		return attributes.get(attribute);
+	public Byte getStat(Stats attribute) {
+		return stats.get(attribute);
 	}
 
 	@Override
-	public Map<Attribute, Byte> getAttributes() {
-		return attributes;
+	public Map<Stats, Byte> getStats() {
+		return stats;
 	}
 
 }
